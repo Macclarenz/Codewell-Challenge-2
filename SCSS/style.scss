@@ -1,0 +1,395 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;700&display=swap');
+
+$Manrope: (light: 300,
+    regular: 400,
+    medium: 500,
+    bold: 700,
+);
+
+$nav-button-color: #ee7c0d;
+
+@mixin flex($justify, $align, $direction) {
+    display: flex;
+    justify-content: $justify;
+    align-items: $align;
+    flex-direction: $direction;
+}
+
+@mixin grid($row, $column, $gap: 0em) {
+    display: grid;
+    grid-template-rows: $row;
+    grid-template-columns: $column;
+    grid-gap: $gap;
+}
+
+@mixin text($align, $weight, $size) {
+    text-align: $align;
+    font-weight: $weight;
+    font-size: $size;
+}
+
+*,
+*:before,
+*:after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+
+}
+
+body {
+    margin: 0 auto;
+    width: 90%;
+    max-width: 1440px;
+    transition: all 500ms ease;
+
+    h1,
+    h2,
+    h3,
+    p,
+    a {
+        font-family: 'Manrope', sans-serif;
+    }
+
+    img {
+        width: 100%;
+    }
+
+    &.dark-mode {
+        $body-bg: #161827 !important;
+        background-color: $body-bg;
+
+        h1, h2, h3, p, a {
+            color: white;
+        }
+    }
+}
+
+nav {
+    @include flex(space-between, center, row);
+    padding-block: 2em;
+    position: relative;
+
+    img {
+        width: auto;
+    }
+
+    .nav-logo img {
+        pointer-events: none;
+    }
+
+    .nav-hamburger {
+        img {
+            padding: 1em;
+            pointer-events: none;
+            transition: all 250ms ease;
+        }
+
+        &.active img {
+            filter: drop-shadow(rgba(0, 0, 0, 0.733) 0 0 1em);
+        }
+
+        &:hover img {
+            filter: drop-shadow(rgba(0, 0, 0, 0.733) 0 0 1em);
+        }
+    }
+
+    ul {
+        background-color: #ee7c0d;
+        border-radius: .5em;
+        list-style: none;
+        padding: 1.8em 1.3em;
+        position: absolute;
+        right: 50%;
+        opacity: 0;
+        transform: translateX(50%) scale(0);
+        transform-origin: top right;
+        transition: all 500ms ease;
+        top: 100%;
+        width: 90%;
+        max-width: 600px;
+        z-index: 100;
+        @include flex(center, center, column);
+
+        li {
+            width: 100%;
+            @include flex(center, center, column);
+
+            a {
+                color: white;
+                opacity: 0;
+                padding: .25em;
+                position: relative;
+                text-decoration: none;
+                transition: all 250ms ease;
+                width: 100%;
+                @include text(center, map-get($Manrope, regular), 18px);
+
+                &::before {
+                    content: '';
+                    background-color: currentColor;
+                    display: block;
+                    height: 2px;
+                    left: 50%;
+                    top: 100%;
+                    position: absolute;
+                    width: 8ch;
+                    transition: inherit;
+                    transform: translateX(-50%) scaleX(0);
+                    transform-origin: left;
+                    z-index: 100;
+                }
+
+                &:hover::before {
+                    transform: translateX(-50%) scaleX(1);
+                }
+            }
+
+            .nav-subscribe::before {
+                top: 80%;
+            }
+
+            &:not(:last-child) {
+                margin-bottom: 1em;
+            }
+
+            .nav-subscribe {
+                background-color: white;
+                border-radius: .8em;
+                color: black;
+                font-weight: map-get($Manrope, medium);
+                padding: .5em 1em;
+                width: auto;
+            }
+        }
+
+        &.open {
+            opacity: 1;
+            transform: translateX(50%) scaleX(1);
+
+            a {
+                opacity: 1;
+                transition-delay: 250ms;
+            }
+        }
+    }
+}
+
+main {
+    transition: all 250ms ease;
+    @include grid(1fr, 3fr, 1.5em);
+
+    section {
+        a {
+            color: black;
+            position: relative;
+            text-decoration: none;
+
+            &>img {
+                max-height: 250px !important;
+                object-fit: cover;
+            }
+
+            img {
+                transition: all 250ms ease;
+            }
+
+            h1 {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                margin-block: .5em;
+                @include text(left, map-get($Manrope, bold), 30px);
+            }
+
+            h1,
+            h2,
+            h3 {
+                transition: all 250ms ease;
+            }
+
+            p {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                line-height: 1.6;
+                text-overflow: ellipsis;
+            }
+
+            .author-container {
+                margin-block: .5em .8em;
+                @include flex(flex-start, center, row);
+
+                img {
+                    font-smooth: antialiased;
+                    image-rendering: auto;
+                    margin-right: 1em;
+                    width: 50px;
+                }
+
+                h2,
+                p {
+                    font-size: 13px;
+                }
+            }
+
+            &::before {
+                content: '';
+                background-color: $nav-button-color;
+                height: 5px;
+                width: 100%;
+                position: absolute;
+                bottom: 0;
+                transition: all 500ms cubic-bezier(0, 0, 0.35, 0.98);
+                transform: scaleX(0);
+            }
+        }
+
+        &:hover {
+            a {
+                &:hover::before {
+                    transform: scaleX(1);
+                }
+
+                & > img {
+                    opacity: .75;
+                } 
+            }
+
+            h1,
+            h2,
+            h3 {
+                color: $nav-button-color;
+            }
+        }
+    }
+}
+
+footer {
+    padding-block: 2em;
+
+    img {
+        margin-block: .5em;
+        width: auto;
+    }
+
+    p {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 700px) {
+    nav {
+
+        .nav-hamburger {
+            display: none;
+        }
+
+        ul {
+            background-color: transparent;
+            margin-left: auto;
+            opacity: 1;
+            position: static;
+            transform: none;
+            width: clamp(280px, 80%, 420px);
+            // max-width: 400px;
+            @include flex(space-between, center, row);
+
+            li {
+                a {
+                    color: black;
+                    opacity: 1;
+                    font-weight: map-get($Manrope, medium);
+
+                    &::before {
+                        background-color: $nav-button-color;
+                        width: 100%;
+                    }
+                }
+
+                .nav-subscribe {
+                    padding: 1em 1.5em;
+                    background-color: $nav-button-color;
+
+                    &:hover {
+                        color: white;
+                    }
+
+                    &::before {
+                        background-color: white;
+                        width: 80%;
+                    }
+                }
+            }
+
+            li:not(:last-child) {
+                margin-bottom: revert;
+                margin-right: 1em;
+            }
+
+        }
+    }
+
+    footer {
+        @include flex(space-between, center, row);
+    }
+}
+
+@media (min-width: 900px) {
+    nav {
+        padding-top: 1em;
+    }
+
+    body {
+        width: 80%;
+    }
+
+    main {
+        @include grid(auto 1fr, 1fr 1fr 1fr, 2em);
+
+        section {
+            article :where(h1, h2, p) {
+                -webkit-line-clamp: 2;
+            }
+
+            .author-container {
+                margin-top: 2em !important;
+            }
+        }
+
+        section:first-child {
+            grid-column: 1 / -1;
+            max-height: 500px;
+            margin-bottom: 2em;
+            align-self: center;
+
+            a {
+                @include flex(space-between, center, row);
+
+                &>*:not(img) {
+                    margin-left: 2em;
+                }
+
+                &>img {
+                    width: 480px;
+                }
+
+                &::before {
+                    transform-origin: left;
+                }
+            }
+        }
+
+        section:not(:first-child) {
+            max-height: 500px;
+        }
+
+        h1,
+        h2 {
+            font-size: 28px !important;
+        }
+    }
+}
